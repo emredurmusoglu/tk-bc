@@ -27,20 +27,16 @@
 
       <section class="tray" aria-label="Kaserollar">
         <div class="card" draggable="true" data-item="1">
-          <img src="Kaserol1.png" alt="Kaserol 1" />
-          <span>Meze 1</span>
+          <img src="sushi.png" alt="Sushi" />
+          <span>Sushi</span>
         </div>
         <div class="card" draggable="true" data-item="2">
-          <img src="Kaserol2.png" alt="Kaserol 2" />
-          <span>Meze 2</span>
+          <img src="shrimp.png" alt="Shrimp" />
+          <span>Shrimp</span>
         </div>
         <div class="card" draggable="true" data-item="3">
-          <img src="Kaserol3.png" alt="Kaserol 3" />
-          <span>Meze 3</span>
-        </div>
-        <div class="card" draggable="true" data-item="4">
-          <img src="Kaserol4.png" alt="Kaserol 4" />
-          <span>Meze 4</span>
+          <img src="pizza.png" alt="Pizza" />
+          <span>Pizza</span>
         </div>
       </section>
 
@@ -48,29 +44,31 @@
         <div class="plate-drop" id="plateDrop" aria-label="Servis tabağı">
           <img src="servis.png" alt="Servis tabağı" class="plate-img" />
           <div id="plateItems" class="plate-items" aria-live="polite"></div>
-          <div class="plate-actions">
-            <button id="submitOrder" class="primary-button" type="button">Gönder</button>
-          </div>
         </div>
+        <div class="plate-actions">
+          <button id="submitOrder" class="primary-button" type="button">Gönder</button>
+          <button id="resetPlate" class="ghost-button" type="button">Tabağı Temizle</button>
+        </div>
+        <div id="plateChips" class="plate-chip-row" aria-live="polite"></div>
         <p class="hint">Tabağa eklemek için sürükle. Çıkarmak için tabaktaki öğeyi kaserolün üstüne geri bırak.</p>
       </section>
 
-      <section class="main-course" id="mainCourse">
+      <section class="main-course is-hidden" id="mainCourse">
         <div class="section-head">
           <h2>Ana Yemek</h2>
           <p>Bir ana yemek seç ve gönder.</p>
         </div>
         <div class="tray" aria-label="Ana yemekler">
           <div class="card main-card" data-main="mantarmakarna">
-            <img src="mantarmakarna.png" alt="Mantarlı Makarna" />
+            <img src="pasta.png" alt="Mantarlı Makarna" />
             <span>Mantarlı Makarna</span>
           </div>
           <div class="card main-card" data-main="kuzuincik">
-            <img src="kuzuincik.png" alt="Kuzu İncik" />
+            <img src="kuzu.png" alt="Kuzu İncik" />
             <span>Kuzu İncik</span>
           </div>
           <div class="card main-card" data-main="kilicbaligi">
-            <img src="kilicbaligi.png" alt="Kılıç Balığı" />
+            <img src="balik.png" alt="Kılıç Balığı" />
             <span>Kılıç Balığı</span>
           </div>
         </div>
@@ -79,37 +77,35 @@
         </div>
       </section>
 
-      <section class="dessert-course" id="dessertCourse">
+      <section class="dessert-course is-hidden" id="dessertCourse">
         <div class="section-head">
           <h2>Tatlı</h2>
           <p>Tatlılarını seç ve gönder.</p>
         </div>
         <div class="tray" aria-label="Tatlılar">
           <div class="card dessert-card" draggable="true" data-dessert="1">
-            <img src="Kaserol1.png" alt="Tatlı 1" />
-            <span>Tatlı 1</span>
+            <img src="baklava.png" alt="Baklava" />
+            <span>Baklava</span>
           </div>
           <div class="card dessert-card" draggable="true" data-dessert="2">
-            <img src="Kaserol2.png" alt="Tatlı 2" />
-            <span>Tatlı 2</span>
+            <img src="browni.png" alt="Browni" />
+            <span>Browni</span>
           </div>
           <div class="card dessert-card" draggable="true" data-dessert="3">
-            <img src="Kaserol3.png" alt="Tatlı 3" />
-            <span>Tatlı 3</span>
-          </div>
-          <div class="card dessert-card" draggable="true" data-dessert="4">
-            <img src="Kaserol4.png" alt="Tatlı 4" />
-            <span>Tatlı 4</span>
+            <img src="cheesecake.png" alt="Cheesecake" />
+            <span>Cheesecake</span>
           </div>
         </div>
         <div class="plate-area">
           <div class="plate-drop" id="dessertDrop" aria-label="Tatlı tabağı">
             <img src="servis.png" alt="Tatlı tabağı" class="plate-img" />
             <div id="dessertItems" class="plate-items" aria-live="polite"></div>
-            <div class="plate-actions">
-              <button id="submitDessert" class="primary-button" type="button">Gönder</button>
-            </div>
           </div>
+          <div class="plate-actions">
+            <button id="submitDessert" class="primary-button" type="button">Gönder</button>
+            <button id="resetDessert" class="ghost-button" type="button">Tabağı Temizle</button>
+          </div>
+          <div id="dessertChips" class="plate-chip-row" aria-live="polite"></div>
           <p class="hint">Tatlı tabağına eklemek için sürükle. Çıkarmak için tatlıyı geri bırak.</p>
         </div>
       </section>

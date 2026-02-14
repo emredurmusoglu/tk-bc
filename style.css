@@ -185,19 +185,22 @@ body {
 }
 
 .chef-item {
-  --chef-box-size: min(240px, 80vw);
+  --chef-box-size: clamp(200px, 32vw, 240px);
 }
 
 .chef-plate-visual {
   position: relative;
   width: var(--chef-box-size);
   height: var(--chef-box-size);
+  flex: 0 0 var(--chef-box-size);
   border-radius: 18px;
   border: 1px solid #ead9c4;
   background: #fffaf2;
   box-shadow: 0 8px 20px rgba(43, 36, 27, 0.12);
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
 }
 
@@ -208,14 +211,12 @@ body {
 }
 
 .chef-plate-items {
-  position: absolute;
-  inset: 0;
   display: flex;
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
-  gap: 10px;
-  padding: 16px;
+  gap: 8px;
+  padding: 8px 12px 16px;
   --chip-scale: 1;
 }
 
@@ -226,8 +227,9 @@ body {
   background: #fff;
   border: 1px solid #ead9c4;
   border-radius: 999px;
-  padding: 6px 14px 6px 10px;
+  padding: 5px 24px 5px 10px;
   font-weight: 600;
+  font-size: 13px;
   position: relative;
   transform: scale(var(--chip-scale));
   transform-origin: center;
@@ -235,8 +237,9 @@ body {
 
 .chef-plate-item .chip-sup {
   position: absolute;
-  top: -6px;
-  right: -2px;
+  top: 0;
+  right: 0;
+  transform: translate(70%, -60%);
   background: #c55b28;
   color: #fff;
   font-size: 10px;
@@ -249,7 +252,7 @@ body {
 
 .chef-main {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   flex-wrap: wrap;
 }
@@ -260,6 +263,9 @@ body {
   gap: 8px;
   width: var(--chef-box-size);
   height: var(--chef-box-size);
+  flex: 0 0 var(--chef-box-size);
+  min-width: var(--chef-box-size);
+  min-height: var(--chef-box-size);
   padding: 14px 16px;
   border-radius: 16px;
   background: #fffaf2;
@@ -285,6 +291,13 @@ body {
   border: 1px dashed #e2c7ae;
   padding: 10px 14px;
   border-radius: 12px;
+  width: var(--chef-box-size);
+  height: var(--chef-box-size);
+  min-width: var(--chef-box-size);
+  min-height: var(--chef-box-size);
+  display: grid;
+  place-items: center;
+  text-align: center;
 }
 
 .tray {
@@ -295,7 +308,7 @@ body {
 
 .card {
   background: #2b241b;
-  padding: 16px;
+  padding: 8px;
   border-radius: 18px;
   border: 1px dashed #6f5a46;
   display: grid;
@@ -317,6 +330,18 @@ body {
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+}
+
+.card[data-item="1"] img {
+  max-width: 740px;
+}
+
+.card[data-item="2"] img {
+  max-width: 740px;
+}
+
+.card[data-item="3"] img {
+  max-width: 740px;
 }
 
 .card span {
@@ -405,18 +430,12 @@ body {
 }
 
 .plate-actions {
-  position: absolute;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   width: 100%;
-  pointer-events: none;
-}
-
-.plate-actions .primary-button {
-  pointer-events: auto;
+  margin-top: -6px;
 }
 
 .plate-item {
@@ -447,15 +466,61 @@ body {
   box-shadow: 0 4px 8px rgba(43, 36, 27, 0.2);
 }
 
+.plate-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  min-height: 32px;
+  margin-top: 6px;
+}
+
 .hint {
   margin: 0;
   font-size: 14px;
   color: #5d4a35;
 }
 
+.is-hidden {
+  display: none;
+}
+
 @media (max-width: 640px) {
   .seat {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .plate-drop {
+    width: min(440px, 92vw);
+    aspect-ratio: 1.2 / 1;
+    min-height: 420px;
+  }
+
+  .plate-img {
+    width: 88%;
+  }
+
+  .plate-actions {
+    margin-top: -4px;
+    gap: 6px;
+  }
+
+  .plate-chip-row {
+    margin-top: 4px;
+  }
+
+  .chef-plate-visual {
+    --chef-box-size: min(280px, 78vw);
+  }
+
+  .chef-plate-visual img {
+    width: 92%;
+    max-height: 80%;
+  }
+
+  .chef-plate-items {
+    inset: 12% 14% 18%;
+    padding: 0;
   }
 }

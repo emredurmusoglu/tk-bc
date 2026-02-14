@@ -2,16 +2,14 @@ const chefList = document.getElementById("chefList");
 const chefSeatBar = document.getElementById("chefSeatBar");
 const STORAGE_KEY = "kaserol_orders";
 const ITEM_LABELS = {
-  "1": "Meze 1",
-  "2": "Meze 2",
-  "3": "Meze 3",
-  "4": "Meze 4",
+  "1": "Sushi",
+  "2": "Shrimp",
+  "3": "Pizza",
 };
 const DESSERT_LABELS = {
-  "1": "Tatlı 1",
-  "2": "Tatlı 2",
-  "3": "Tatlı 3",
-  "4": "Tatlı 4",
+  "1": "Baklava",
+  "2": "Browni",
+  "3": "Cheesecake",
 };
 const MAIN_LABELS = {
   mantarmakarna: "Mantarlı Makarna",
@@ -19,9 +17,33 @@ const MAIN_LABELS = {
   kilicbaligi: "Kılıç Balığı",
 };
 const MAIN_IMAGES = {
-  mantarmakarna: "mantarmakarna.png",
-  kuzuincik: "kuzuincik.png",
-  kilicbaligi: "kilicbaligi.png",
+  mantarmakarna: "pasta.png",
+  kuzuincik: "kuzu.png",
+  kilicbaligi: "balik.png",
+};
+const MEZE_IMAGE_MAP = {
+  "1": { src: "sushi-only.png", alt: "Sushi tabağı" },
+  "2": { src: "shrimp-only.png", alt: "Shrimp tabağı" },
+  "3": { src: "pizza-only.png", alt: "Pizza tabağı" },
+  "1,2": { src: "sushi-shrimp.png", alt: "Sushi ve shrimp tabağı" },
+  "1,3": { src: "sushi-pizza.png", alt: "Sushi ve pizza tabağı" },
+  "2,3": { src: "shrimp-pizza.png", alt: "Shrimp ve pizza tabağı" },
+  "1,2,3": {
+    src: "sushi-shrimp-pizza.png",
+    alt: "Sushi, shrimp ve pizza tabağı",
+  },
+};
+const DESSERT_IMAGE_MAP = {
+  "1": { src: "baklava-only.png", alt: "Baklava tabağı" },
+  "2": { src: "browni-only.png", alt: "Browni tabağı" },
+  "3": { src: "cheesecake-only.png", alt: "Cheesecake tabağı" },
+  "1,2": { src: "baklava-browni.png", alt: "Baklava ve browni tabağı" },
+  "1,3": { src: "baklava-cheesecake.png", alt: "Baklava ve cheesecake tabağı" },
+  "2,3": { src: "cheesecake-browni.png", alt: "Browni ve cheesecake tabağı" },
+  "1,2,3": {
+    src: "browni-cheesecake-baklava.png",
+    alt: "Browni, cheesecake ve baklava tabağı",
+  },
 };
 
 function loadOrders() {
@@ -70,6 +92,7 @@ function renderSeatDetail(seat, data) {
   const plateItems = document.createElement("div");
   plateItems.className = "chef-plate-items";
 
+  const mezeSet = new Set();
   mezeItems.forEach((entry) => {
     const chip = document.createElement("div");
     chip.className = "chef-plate-item";
@@ -77,21 +100,24 @@ function renderSeatDetail(seat, data) {
     const text = document.createElement("span");
     const normalizedEntry = normalizeChipEntry(entry, ITEM_LABELS, "Meze");
     const label = normalizedEntry.label;
-    text.textContent = label;
-    chip.appendChild(text);
+    if (normalizedEntry.itemId) {
+      mezeSet.add(normalizedEntry.itemId);
+    }
     if (normalizedEntry.count > 1) {
+      text.textContent = label;
+      chip.appendChild(text);
       const sup = document.createElement("span");
       sup.className = "chip-sup";
       sup.textContent = `x${normalizedEntry.count}`;
       chip.appendChild(sup);
+      plateItems.appendChild(chip);
     }
-
-    plateItems.appendChild(chip);
   });
 
   plate.appendChild(plateItems);
   row.appendChild(plate);
   adjustChipScale(plateItems, mezeItems.length);
+  updateChefPlateImage(plateImg, mezeSet);
 
   const mainTitle = document.createElement("div");
   mainTitle.className = "chef-subtitle";
@@ -140,6 +166,7 @@ function renderSeatDetail(seat, data) {
   const dessertChipWrap = document.createElement("div");
   dessertChipWrap.className = "chef-plate-items";
 
+  const dessertSet = new Set();
   dessertItems.forEach((entry) => {
     const chip = document.createElement("div");
     chip.className = "chef-plate-item";
@@ -147,21 +174,24 @@ function renderSeatDetail(seat, data) {
     const text = document.createElement("span");
     const normalizedEntry = normalizeChipEntry(entry, DESSERT_LABELS, "Tatlı");
     const label = normalizedEntry.label;
-    text.textContent = label;
-    chip.appendChild(text);
+    if (normalizedEntry.itemId) {
+      dessertSet.add(normalizedEntry.itemId);
+    }
     if (normalizedEntry.count > 1) {
+      text.textContent = label;
+      chip.appendChild(text);
       const sup = document.createElement("span");
       sup.className = "chip-sup";
       sup.textContent = `x${normalizedEntry.count}`;
       chip.appendChild(sup);
+      dessertChipWrap.appendChild(chip);
     }
-
-    dessertChipWrap.appendChild(chip);
   });
 
   dessertPlate.appendChild(dessertChipWrap);
   row.appendChild(dessertPlate);
   adjustChipScale(dessertChipWrap, dessertItems.length);
+  updateChefDessertImage(dessertImg, dessertSet);
 
   chefList.appendChild(row);
 }
@@ -205,11 +235,12 @@ function renderChefList() {
 
 function adjustChipScale(container, chipCount) {
   if (!container) return;
-  let scale = 1;
-  if (chipCount >= 9) scale = 0.6;
-  else if (chipCount >= 7) scale = 0.7;
-  else if (chipCount >= 5) scale = 0.8;
-  else if (chipCount >= 4) scale = 0.9;
+  const isChef = container.classList.contains("chef-plate-items");
+  let scale = isChef ? 0.9 : 1;
+  if (chipCount >= 9) scale = isChef ? 0.55 : 0.6;
+  else if (chipCount >= 7) scale = isChef ? 0.65 : 0.7;
+  else if (chipCount >= 5) scale = isChef ? 0.75 : 0.8;
+  else if (chipCount >= 4) scale = isChef ? 0.82 : 0.9;
   container.style.setProperty("--chip-scale", String(scale));
 }
 
@@ -223,7 +254,33 @@ function normalizeChipEntry(entry, labels, prefix) {
     count = Number(match[2]) || count;
   }
   const label = labels[itemId] || `${prefix} ${itemId}`.trim();
-  return { label, count };
+  return { label, count, itemId };
+}
+
+function updateChefPlateImage(imgEl, itemSet) {
+  if (!imgEl) return;
+  const key = [...itemSet].sort().join(",");
+  const match = MEZE_IMAGE_MAP[key];
+  if (match) {
+    imgEl.src = match.src;
+    imgEl.alt = match.alt;
+    return;
+  }
+  imgEl.src = "servis.png";
+  imgEl.alt = "Servis tabağı";
+}
+
+function updateChefDessertImage(imgEl, itemSet) {
+  if (!imgEl) return;
+  const key = [...itemSet].sort().join(",");
+  const match = DESSERT_IMAGE_MAP[key];
+  if (match) {
+    imgEl.src = match.src;
+    imgEl.alt = match.alt;
+    return;
+  }
+  imgEl.src = "servis.png";
+  imgEl.alt = "Tatlı tabağı";
 }
 
 renderChefList();

@@ -4,20 +4,31 @@ const toastMessage = document.getElementById("toastMessage");
 const toastOk = document.getElementById("toastOk");
 const plateDrop = document.getElementById("plateDrop");
 const plateItems = document.getElementById("plateItems");
+const plateImage = plateDrop ? plateDrop.querySelector(".plate-img") : null;
+const plateChips = document.getElementById("plateChips");
 const submitOrder = document.getElementById("submitOrder");
+const resetPlate = document.getElementById("resetPlate");
 const submitMain = document.getElementById("submitMain");
 const mainCourse = document.getElementById("mainCourse");
 const mainCards = [...document.querySelectorAll(".main-card")];
 const dessertCourse = document.getElementById("dessertCourse");
 const dessertDrop = document.getElementById("dessertDrop");
 const dessertItems = document.getElementById("dessertItems");
+const dessertImage = dessertDrop ? dessertDrop.querySelector(".plate-img") : null;
 const submitDessert = document.getElementById("submitDessert");
+const resetDessert = document.getElementById("resetDessert");
+const dessertChips = document.getElementById("dessertChips");
 const dessertCards = [...document.querySelectorAll(".dessert-card")];
 
 const counts = new Map();
 const dessertCounts = new Map();
 const STORAGE_KEY = "kaserol_orders";
 let toastOnClose = null;
+const MEZE_LABELS = {
+  "1": "Sushi",
+  "2": "Shrimp",
+  "3": "Pizza",
+};
 
 function showToast(message, onClose) {
   if (!toast) return;
@@ -63,11 +74,13 @@ function getNormalizedSeat(value) {
 
 function focusMainCourse() {
   if (!mainCourse) return;
+  mainCourse.classList.remove("is-hidden");
   mainCourse.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function focusDessertCourse() {
   if (!dessertCourse) return;
+  dessertCourse.classList.remove("is-hidden");
   dessertCourse.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
@@ -135,48 +148,78 @@ function adjustChipScale(container, chipCount) {
   container.style.setProperty("--chip-scale", String(scale));
 }
 
+function updatePlateImage() {
+  if (!plateImage) return;
+  const items = [...counts.keys()].sort();
+  const key = items.join(",");
+  const imageMap = {
+    "1": { src: "sushi-only.png", alt: "Sushi tabağı" },
+    "2": { src: "shrimp-only.png", alt: "Shrimp tabağı" },
+    "3": { src: "pizza-only.png", alt: "Pizza tabağı" },
+    "1,2": { src: "sushi-shrimp.png", alt: "Sushi ve shrimp tabağı" },
+    "1,3": { src: "sushi-pizza.png", alt: "Sushi ve pizza tabağı" },
+    "2,3": { src: "shrimp-pizza.png", alt: "Shrimp ve pizza tabağı" },
+    "1,2,3": {
+      src: "sushi-shrimp-pizza.png",
+      alt: "Sushi, shrimp ve pizza tabağı",
+    },
+  };
+  const match = imageMap[key];
+  if (match) {
+    plateImage.src = match.src;
+    plateImage.alt = match.alt;
+    return;
+  }
+  plateImage.src = "servis.png";
+  plateImage.alt = "Servis tabağı";
+}
+
 function renderPlate() {
   plateItems.innerHTML = "";
-  [...counts.entries()].sort().forEach(([item, count]) => {
-    const chip = document.createElement("div");
-    chip.className = "plate-item";
-    chip.draggable = true;
-    chip.dataset.item = item;
-    chip.textContent = `${item}`;
-    if (count > 1) {
+  if (plateChips) plateChips.innerHTML = "";
+  updatePlateImage();
+
+  [...counts.entries()]
+    .sort()
+    .filter(([, count]) => count > 1)
+    .forEach(([item, count]) => {
+      if (!plateChips) return;
+      const chip = document.createElement("div");
+      chip.className = "plate-item";
+      const label = MEZE_LABELS[item] || item;
+      chip.textContent = label;
       const sup = document.createElement("span");
       sup.className = "chip-sup";
       sup.textContent = `x${count}`;
       chip.appendChild(sup);
-    }
-    chip.addEventListener("dragstart", (event) => {
-      setDragData(event, { source: "plate", item });
+      plateChips.appendChild(chip);
     });
-    plateItems.appendChild(chip);
-  });
-  adjustChipScale(plateItems, counts.size);
 }
 
 function renderDessert() {
   dessertItems.innerHTML = "";
-  [...dessertCounts.entries()].sort().forEach(([item, count]) => {
-    const chip = document.createElement("div");
-    chip.className = "plate-item";
-    chip.draggable = true;
-    chip.dataset.item = item;
-    chip.textContent = `${item}`;
-    if (count > 1) {
+  if (dessertChips) dessertChips.innerHTML = "";
+  updateDessertImage();
+
+  [...dessertCounts.entries()]
+    .sort()
+    .filter(([, count]) => count > 1)
+    .forEach(([item, count]) => {
+      if (!dessertChips) return;
+      const chip = document.createElement("div");
+      chip.className = "plate-item";
+      const labelMap = {
+        "1": "Baklava",
+        "2": "Browni",
+        "3": "Cheesecake",
+      };
+      chip.textContent = labelMap[item] || item;
       const sup = document.createElement("span");
       sup.className = "chip-sup";
       sup.textContent = `x${count}`;
       chip.appendChild(sup);
-    }
-    chip.addEventListener("dragstart", (event) => {
-      setDragData(event, { source: "dessert-plate", item });
+      dessertChips.appendChild(chip);
     });
-    dessertItems.appendChild(chip);
-  });
-  adjustChipScale(dessertItems, dessertCounts.size);
 }
 
 function incrementItem(item) {
@@ -209,6 +252,32 @@ function decrementDessert(item) {
     dessertCounts.set(item, current - 1);
   }
   renderDessert();
+}
+
+function updateDessertImage() {
+  if (!dessertImage) return;
+  const items = [...dessertCounts.keys()].sort();
+  const key = items.join(",");
+  const imageMap = {
+    "1": { src: "baklava-only.png", alt: "Baklava tabağı" },
+    "2": { src: "browni-only.png", alt: "Browni tabağı" },
+    "3": { src: "cheesecake-only.png", alt: "Cheesecake tabağı" },
+    "1,2": { src: "baklava-browni.png", alt: "Baklava ve browni tabağı" },
+    "1,3": { src: "baklava-cheesecake.png", alt: "Baklava ve cheesecake tabağı" },
+    "2,3": { src: "cheesecake-browni.png", alt: "Browni ve cheesecake tabağı" },
+    "1,2,3": {
+      src: "browni-cheesecake-baklava.png",
+      alt: "Browni, cheesecake ve baklava tabağı",
+    },
+  };
+  const match = imageMap[key];
+  if (match) {
+    dessertImage.src = match.src;
+    dessertImage.alt = match.alt;
+    return;
+  }
+  dessertImage.src = "servis.png";
+  dessertImage.alt = "Tatlı tabağı";
 }
 
 function handleDropToPlate(event) {
@@ -339,6 +408,12 @@ submitOrder.addEventListener("click", () => {
   clearPlate();
 });
 
+if (resetPlate) {
+  resetPlate.addEventListener("click", () => {
+    clearPlate();
+  });
+}
+
 mainCards.forEach((card) => {
   card.addEventListener("click", () => updateMainSelection(card));
 });
@@ -390,9 +465,15 @@ submitDessert.addEventListener("click", () => {
     dessert: serializeDessert(),
   };
   saveOrders(orders);
-  showToast("Tatlı tercihiniz kaydedildi.");
+  showToast("Tüm siparişleriniz alınmıştır.");
   clearDessert();
 });
 
 renderPlate();
 renderDessert();
+
+if (resetDessert) {
+  resetDessert.addEventListener("click", () => {
+    clearDessert();
+  });
+}
