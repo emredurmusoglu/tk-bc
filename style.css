@@ -80,6 +80,13 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  line-height: 1;
 }
 
 .primary-button {
@@ -96,6 +103,14 @@ body {
   background: #fff3e6;
   color: #3d2f20;
   border: 1px solid #e7cbb1;
+}
+
+@media (max-width: 520px) {
+  .primary-button,
+  .ghost-button {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
 }
 
 .toast {
@@ -573,7 +588,7 @@ body {
     margin-top: 4px;
   }
 
-  .chef-plate-visual {
+  .chef-item {
     --chef-box-size: min(280px, 78vw);
   }
 
