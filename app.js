@@ -111,8 +111,12 @@ function showToast(message, onClose, action) {
       toastChef.textContent = action.label || "Şef Ekranı";
       toastChef.href = action.href;
       toastChef.hidden = false;
+      toastChef.style.display = "";
+      toastChef.setAttribute("aria-hidden", "false");
     } else {
       toastChef.hidden = true;
+      toastChef.style.display = "none";
+      toastChef.setAttribute("aria-hidden", "true");
     }
   }
   toast.hidden = false;
@@ -141,18 +145,18 @@ function validateSeatValue(value) {
 
   const match = trimmed.match(/^(\d{1,2})\s*([a-zA-Z])$/);
   if (!match) {
-    return { ok: false, message: "Uçağımızda bu şekilde bir koltuk bulunmamaktadır." };
+    return { ok: false, message: "Uçağımızda böyle bir koltuk bulunmamaktadır." };
   }
 
   const number = Number.parseInt(match[1], 10);
   if (Number.isNaN(number) || number < 1 || number > 55) {
-    return { ok: false, message: "Uçağımızda bu şekilde bir koltuk bulunmamaktadır." };
+    return { ok: false, message: "Uçağımızda böyle bir koltuk bulunmamaktadır." };
   }
 
   const letter = match[2].toLowerCase();
   const allowed = new Set(["a", "b", "c", "d", "e", "f", "g", "h", "j", "k"]);
   if (!allowed.has(letter)) {
-    return { ok: false, message: "Uçağımızda bu şekilde bir koltuk bulunmamaktadır." };
+    return { ok: false, message: "Uçağımızda böyle bir koltuk bulunmamaktadır." };
   }
 
   return { ok: true };
@@ -460,7 +464,11 @@ seatInput.addEventListener("input", () => {
   if (!toast) return;
   toast.hidden = true;
   toastOnClose = null;
-  if (toastChef) toastChef.hidden = true;
+  if (toastChef) {
+    toastChef.hidden = true;
+    toastChef.style.display = "none";
+    toastChef.setAttribute("aria-hidden", "true");
+  }
 });
 
 if (toast) {
