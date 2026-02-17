@@ -13,14 +13,17 @@
         <div class="header-top">
           <div>
             <h1>Kaserol Servis</h1>
-            <p>Koltuk numarası gir, kaseroldan tabağa sürükle.</p>
+            <p>
+              Lütfen koltuk numaranızı girerek tercih ettiğiniz ürünü kaserolden
+              tabağınıza sürükleyiniz.
+            </p>
           </div>
           <a href="chef.html" class="ghost-button">Şef Ekranı</a>
         </div>
         <div class="seat-row">
           <label class="seat">
-            <span>Koltuk No</span>
-            <input id="seatInput" type="text" placeholder="Örn: 12A" />
+            <span>Koltuk Numarası</span>
+            <input id="seatInput" type="text" placeholder="Örnek: 12A" />
           </label>
         </div>
       </header>
@@ -29,14 +32,23 @@
         <div class="card" draggable="true" data-item="1">
           <img src="sushi.png" alt="Sushi" />
           <span>Sushi</span>
+          <button class="info-button" type="button" data-info="sushi" aria-label="Sushi bilgisi">
+            Bilgi
+          </button>
         </div>
         <div class="card" draggable="true" data-item="2">
           <img src="shrimp.png" alt="Shrimp" />
           <span>Shrimp</span>
+          <button class="info-button" type="button" data-info="shrimp" aria-label="Shrimp bilgisi">
+            Bilgi
+          </button>
         </div>
         <div class="card" draggable="true" data-item="3">
           <img src="pizza.png" alt="Pizza" />
           <span>Pizza</span>
+          <button class="info-button" type="button" data-info="pizza" aria-label="Pizza bilgisi">
+            Bilgi
+          </button>
         </div>
       </section>
 
@@ -50,26 +62,38 @@
           <button id="resetPlate" class="ghost-button" type="button">Tabağı Temizle</button>
         </div>
         <div id="plateChips" class="plate-chip-row" aria-live="polite"></div>
-        <p class="hint">Tabağa eklemek için sürükle. Çıkarmak için tabaktaki öğeyi kaserolün üstüne geri bırak.</p>
+        <p class="hint">
+          Tabağınıza eklemek için sürükleyiniz. Çıkarmak için Tabağı Temizle
+          butonunu kullanınız.
+        </p>
       </section>
 
       <section class="main-course is-hidden" id="mainCourse">
         <div class="section-head">
           <h2>Ana Yemek</h2>
-          <p>Bir ana yemek seç ve gönder.</p>
+          <p>Lütfen bir ana yemek seçerek gönderiniz.</p>
         </div>
         <div class="tray" aria-label="Ana yemekler">
           <div class="card main-card" data-main="mantarmakarna">
             <img src="pasta.png" alt="Mantarlı Makarna" />
             <span>Mantarlı Makarna</span>
+            <button class="info-button" type="button" data-info="mantarmakarna" aria-label="Mantarlı Makarna bilgisi">
+              Bilgi
+            </button>
           </div>
           <div class="card main-card" data-main="kuzuincik">
             <img src="kuzu.png" alt="Kuzu İncik" />
             <span>Kuzu İncik</span>
+            <button class="info-button" type="button" data-info="kuzuincik" aria-label="Kuzu İncik bilgisi">
+              Bilgi
+            </button>
           </div>
           <div class="card main-card" data-main="kilicbaligi">
             <img src="balik.png" alt="Kılıç Balığı" />
             <span>Kılıç Balığı</span>
+            <button class="info-button" type="button" data-info="kilicbaligi" aria-label="Kılıç Balığı bilgisi">
+              Bilgi
+            </button>
           </div>
         </div>
         <div class="main-actions">
@@ -80,20 +104,29 @@
       <section class="dessert-course is-hidden" id="dessertCourse">
         <div class="section-head">
           <h2>Tatlı</h2>
-          <p>Tatlılarını seç ve gönder.</p>
+          <p>Lütfen tatlılarınızı seçerek gönderiniz.</p>
         </div>
         <div class="tray" aria-label="Tatlılar">
           <div class="card dessert-card" draggable="true" data-dessert="1">
             <img src="baklava.png" alt="Baklava" />
             <span>Baklava</span>
+            <button class="info-button" type="button" data-info="baklava" aria-label="Baklava bilgisi">
+              Bilgi
+            </button>
           </div>
           <div class="card dessert-card" draggable="true" data-dessert="2">
             <img src="browni.png" alt="Browni" />
             <span>Browni</span>
+            <button class="info-button" type="button" data-info="browni" aria-label="Browni bilgisi">
+              Bilgi
+            </button>
           </div>
           <div class="card dessert-card" draggable="true" data-dessert="3">
             <img src="cheesecake.png" alt="Cheesecake" />
             <span>Cheesecake</span>
+            <button class="info-button" type="button" data-info="cheesecake" aria-label="Cheesecake bilgisi">
+              Bilgi
+            </button>
           </div>
         </div>
         <div class="plate-area">
@@ -106,15 +139,27 @@
             <button id="resetDessert" class="ghost-button" type="button">Tabağı Temizle</button>
           </div>
           <div id="dessertChips" class="plate-chip-row" aria-live="polite"></div>
-          <p class="hint">Tatlı tabağına eklemek için sürükle. Çıkarmak için tatlıyı geri bırak.</p>
+          <p class="hint">
+            Tatlı tabağınıza eklemek için sürükleyiniz. Çıkarmak için tatlıyı geri
+            bırakınız.
+          </p>
         </div>
       </section>
     </main>
 
     <div id="toast" class="toast" role="alertdialog" aria-modal="true" hidden>
       <div class="toast-card">
-        <p id="toastMessage">Önce koltuk numarası gir.</p>
+        <p id="toastMessage">Lütfen önce koltuk numaranızı giriniz.</p>
         <button id="toastOk" class="primary-button" type="button">Tamam</button>
+        <a id="toastChef" class="ghost-button" href="chef.html" hidden>Şef Ekranı</a>
+      </div>
+    </div>
+
+    <div id="infoModal" class="info-modal" role="dialog" aria-modal="true" hidden>
+      <div class="info-card" role="document">
+        <h3 id="infoTitle" class="info-title"></h3>
+        <p id="infoBody" class="info-body"></p>
+        <p id="infoAllergen" class="info-allergen"></p>
       </div>
     </div>
 

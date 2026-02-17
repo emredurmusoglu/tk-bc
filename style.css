@@ -349,6 +349,69 @@ body {
   font-weight: 600;
 }
 
+.info-button {
+  border: 1px solid #e7cbb1;
+  background: #fff3e6;
+  color: #3d2f20;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.info-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(43, 36, 27, 0.2);
+}
+
+.info-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 14, 9, 0.55);
+  display: grid;
+  place-items: center;
+  z-index: 35;
+  padding: 20px;
+}
+
+.info-modal[hidden] {
+  display: none;
+}
+
+.info-card {
+  background: #fff9f0;
+  color: #2b241b;
+  padding: 22px 24px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  display: grid;
+  gap: 12px;
+  max-width: min(520px, 92vw);
+}
+
+.info-title {
+  margin: 0;
+  font-size: 20px;
+}
+
+.info-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.info-allergen {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 700;
+  color: #5d4a35;
+  white-space: pre-line;
+}
+
 .main-course {
   display: grid;
   gap: 16px;

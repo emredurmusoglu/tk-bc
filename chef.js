@@ -144,7 +144,7 @@ function renderSeatDetail(seat, data) {
   } else {
     const empty = document.createElement("div");
     empty.className = "chef-main-empty";
-    empty.textContent = "Ana yemek seçilmedi.";
+    empty.textContent = "Ana yemek seçimi yapılmamıştır.";
     mainWrap.appendChild(empty);
   }
 
@@ -205,7 +205,7 @@ function renderChefList() {
   if (entries.length === 0) {
     const empty = document.createElement("div");
     empty.className = "chef-item";
-    empty.textContent = "Kayıtlı sipariş yok.";
+    empty.textContent = "Henüz kayıtlı sipariş bulunmamaktadır.";
     chefList.appendChild(empty);
     return;
   }
