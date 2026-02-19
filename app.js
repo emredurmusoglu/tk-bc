@@ -25,6 +25,7 @@ const infoTitle = document.getElementById("infoTitle");
 const infoBody = document.getElementById("infoBody");
 const infoAllergen = document.getElementById("infoAllergen");
 const infoButtons = [...document.querySelectorAll(".info-button")];
+const cardImages = [...document.querySelectorAll(".card img")];
 
 const counts = new Map();
 const dessertCounts = new Map();
@@ -504,6 +505,13 @@ infoButtons.forEach((button) => {
     showInfoModal(button.dataset.info);
   });
   button.addEventListener("dragstart", (event) => {
+    event.preventDefault();
+  });
+});
+
+cardImages.forEach((img) => {
+  img.setAttribute("draggable", "false");
+  img.addEventListener("dragstart", (event) => {
     event.preventDefault();
   });
 });
