@@ -31,6 +31,7 @@ const counts = new Map();
 const dessertCounts = new Map();
 const STORAGE_KEY = "kaserol_orders";
 let toastOnClose = null;
+let clickAudioContext = null;
 const MEZE_LABELS = {
   "1": "Sushi",
   "2": "Shrimp",
@@ -136,6 +137,38 @@ function showInfoModal(infoKey) {
 function hideInfoModal() {
   if (!infoModal) return;
   infoModal.hidden = true;
+}
+
+function provideSelectionFeedback() {
+  try {
+    if (navigator.vibrate) {
+      navigator.vibrate(12);
+    }
+  } catch {
+    // Ignore vibration errors.
+  }
+
+  try {
+    if (!clickAudioContext) {
+      clickAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (clickAudioContext.state === "suspended") {
+      clickAudioContext.resume();
+    }
+    const oscillator = clickAudioContext.createOscillator();
+    const gain = clickAudioContext.createGain();
+    oscillator.type = "square";
+    oscillator.frequency.value = 880;
+    gain.gain.setValueAtTime(0.0001, clickAudioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.18, clickAudioContext.currentTime + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, clickAudioContext.currentTime + 0.05);
+    oscillator.connect(gain);
+    gain.connect(clickAudioContext.destination);
+    oscillator.start();
+    oscillator.stop(clickAudioContext.currentTime + 0.06);
+  } catch {
+    // Ignore audio errors.
+  }
 }
 
 function validateSeatValue(value) {
@@ -390,6 +423,7 @@ function handleDropToPlate(event) {
   const data = getDragData(event);
   if (!data || data.source !== "tray") return;
   incrementItem(data.item);
+  provideSelectionFeedback();
 }
 
 function handleDropToDessert(event) {
@@ -403,6 +437,7 @@ function handleDropToDessert(event) {
   const data = getDragData(event);
   if (!data || data.source !== "dessert-tray") return;
   incrementDessert(data.item);
+  provideSelectionFeedback();
 }
 
 function handleDropToTray(event) {
@@ -410,6 +445,7 @@ function handleDropToTray(event) {
   const data = getDragData(event);
   if (!data || data.source !== "plate") return;
   decrementItem(data.item);
+  provideSelectionFeedback();
 }
 
 function handleDropToDessertTray(event) {
@@ -417,6 +453,7 @@ function handleDropToDessertTray(event) {
   const data = getDragData(event);
   if (!data || data.source !== "dessert-plate") return;
   decrementDessert(data.item);
+  provideSelectionFeedback();
 }
 
 function enableTrayDrag(card) {
